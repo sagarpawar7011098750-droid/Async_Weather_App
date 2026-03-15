@@ -25,3 +25,47 @@ function loadHistory() {
         historyList.appendChild(li);
     });
 }
+// 4. The main Async function to get the weather
+async function fetchWeather(city) {
+    if (city === "") return; // Do nothing if input is empty
+
+    printToConsole(`1. [Sync] Starting search for: ${city}`);
+    weatherDisplay.innerHTML = `<p>Loading...</p>`;
+
+    try {
+        printToConsole(`2. [Async] Waiting for API response...`);
+        
+        // Fetch the data
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
+        
+        if (!response.ok) {
+            throw new Error("City not found");
+        }
+
+        printToConsole(`3. [Async] Data received, unpacking JSON...`);
+        const data = await response.json();
+        
+        printToConsole(`4. [Sync] Updating UI with weather info.`);
+        
+        // Display the weather
+        weatherDisplay.innerHTML = `
+            <h3>${data.name}, ${data.sys.country}</h3>
+            <p>Temperature: ${data.main.temp} °C</p>
+            <p>Condition: ${data.weather[0].description}</p>
+        `;
+        
+        // Save this successful search to Local Storage
+        let history = JSON.parse(localStorage.getItem('weatherHistory')) || [];
+        if (!history.includes(data.name)) {
+            history.push(data.name);
+            localStorage.setItem('weatherHistory', JSON.stringify(history));
+            loadHistory(); // Refresh the on-screen list
+        }
+
+    } catch (error) {
+        printToConsole(`❌ [Error] ${error.message}`);
+        weatherDisplay.innerHTML = `<p style="color:red;">Error: ${error.message}. Try again.</p>`;
+    }
+
+    printToConsole(`5. [Sync] fetchWeather function finished.`);
+}
