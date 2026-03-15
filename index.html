@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Async Weather Tracker</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <h2>⛅ Async Weather Tracker</h2>
     </header>
-<main class="container">
+
+    <main class="container">
         <section class="left-column">
             <div class="card">
                 <label for="cityInput"><strong>Search City</strong></label>
@@ -34,6 +36,14 @@
             </div>
         </section>
     </main>
-   
+
+    <section class="console-container">
+        <div class="card console-card">
+            <strong>Console - Event Loop</strong>
+            <div id="customConsole"></div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
 </body>
 </html>
